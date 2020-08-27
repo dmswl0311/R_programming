@@ -132,3 +132,32 @@ summary(lm3)
 x <- c(58,49,39,99,32,88,62,30,55,65,44,55,57,53,88,42,39)
 shapiro.test(x)
 t.test(x, mu=55, alternative="greater")
+
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("corrplot")
+install.packages("descr")
+install.packages("klaR")
+
+library(dplyr)
+library(ggplot2)
+library(corrplot)
+library(descr)
+library(klaR)
+
+my_data <- read.csv(file="C:/Users/User/Desktop/source/data/state.csv",header = TRUE)
+mean(my_data[["Population"]])
+mean(my_data[["Population"]],trim=0.1)
+median(my_data[["Population"]])
+weighted.mean(my_data[["Murder.Rate"]],w=my_data[["Population"]])
+
+quantile(my_data[["Population"]],p=c(.05,.25,.5,.75,.95))
+boxplot(my_data[["Population"]]/1000000,ylab="Population(millions)")
+
+x <- c(1,2,3,3,5,6,7,9)
+breaks1 <- seq(from=min(x),to=max(x),length=5)
+pop_freq1 <- cut(x,breaks = breaks1,right=TRUE,include.lowest = TRUE)
+table(pop_freq1)
+hist(x,breaks=breaks1)
+
+#탐색적 데이터 분석, 데이터와 표본분포
