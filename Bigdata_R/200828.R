@@ -44,3 +44,50 @@ addmargins(prop.table(data_mtx))
 barplot(t(data_mtx),beside=TRUE,legend=TRUE,ylim=c(0,120),ylab="Observed frequencies in sample",main="데이터 사이언스 교과목 선호 조사 결과")
 chisq.test(data_mtx)
 
+
+#256-257
+lung <- read.csv(file="C:/Users/User/Desktop/source/data/LungDisease.csv",header=TRUE)
+plot(lung$Exposure,lung$PEFR,xlab="Exposure",ylab="PEER")
+model <- lm(PEFR~Exposure,data=lung)
+model
+abline(model,col="blue")
+
+#258
+head(cars)
+attach(cars)
+
+plot(cars$speed,cars$dist,xlab="speed",ylab="dist")
+lm1 <- lm(dist~speed,data=cars)
+abline(lm1,col="blue")
+
+yhat <- predict(lm1)
+
+cbind(dist,yhat)
+
+join <- function(i)
+  lines(c(speed[i],speed[i]),c(dist[i],yhat[i]),col="green")
+sapply(1:50,join)
+
+#260
+model <- lm(PEFR~Exposure,data=lung)
+plot(lung$Exposure,lung$PEFR,xlab="Exposure",ylab="PEFR",pch=20,col="red")
+abline(model,col="blue")
+
+attach(lung)
+head(lung)
+str(lung)
+
+yhat <- predict(model)
+head(yhat)
+cbind(Exposure,yhat)
+
+join <- function(i)
+  lines(c(Exposure[i],Exposure[i]),c(PEFR[i],yhat[i]),col="green")
+sapply(1:122,join)
+
+#261
+model <- lm(PEFR~Exposure,data=lung)
+model
+
+fitted <- prdict(model)
+resid <- residuals(model)
