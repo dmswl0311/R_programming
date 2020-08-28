@@ -143,8 +143,8 @@ model_pred <- predict(model,level=0.95,interval="predict")
 head(model_pred)
 p_lwr <- model_pred[,2]
 p_upr <- model_pred[,3]
-lines(student_data$height_cm,p_lwr,col="red",lty=2)
-lines(student_data$height_cm,p_upr,col="red",lty=2)
+#lines(student_data$height_cm,p_lwr,col="red",lty=2)
+#lines(student_data$height_cm,p_upr,col="red",lty=2)
 
 #잔차 제곱의 합
 deviance(model)
@@ -172,3 +172,12 @@ y=function(x){
   return(result)
 }
 
+#-----------------------------------------------------------------
+#266p
+house <- read.csv(file="C:/Users/User/Desktop/source/data/house_sales.csv",sep='\t')
+head(house[,c("AdjSalePrice","SqFtTotLiving","SqFtLot","Bathrooms","Bedrooms","BldgGrade")])
+house_lm <- lm(AdjSalePrice~SqFtTotLiving+SqFtLot+Bathrooms+Bedrooms+BldgGrade,data=house,na.action = na.omit)
+house_lm
+
+summary(house_lm)
+house_full <- lm(AdjSalePrice~SqFtTotLiving+SqFtLot+Bathrooms+Bedrooms+BldgGrade)
