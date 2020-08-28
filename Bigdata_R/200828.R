@@ -89,5 +89,86 @@ sapply(1:122,join)
 model <- lm(PEFR~Exposure,data=lung)
 model
 
-fitted <- prdict(model)
+fitted <- predict(model)
 resid <- residuals(model)
+
+#실습 264p
+#데이터 불러오기
+student_data <- read.csv(file="C:/Users/User/Desktop/source/data/student90.csv",header=TRUE)
+attach(student_data)
+
+#회귀모델 생성
+model <- lm(weight_kg~height_cm,student_data)
+#예측 값 구하기, 비교
+model
+coef(model)
+fitted(model)[1:4]
+
+#plot(student_data$height_cm,student_data$weight_kg,xlab ="height",ylab="weight",col="blue",pch=20)
+plot(model,which=4) #which는 그래프의 종류
+
+x_cooks.d <- cooks.distance(model)
+x_cooks.d[1:4]
+NROW(x_cooks.d)
+x_cooks.d[which(x_cooks.d>qf(0.5,df1=2,df2=88))]
+
+#잔차
+residuals(model)[1:4]
+student_data$weight_kg[1:4]
+
+#예측값+잔차
+fitted(model)[1:4]+residuals(model)[1:4]
+
+#잔차분석
+qqnorm(residuals(model))
+qqline(residuals(model))
+
+shapiro.test(residuals(model))
+
+#회귀계수의 신뢰구간
+confint(model,level=0.95)
+model_conf <- predict(model,level=0.95,interval="confidence")
+head(model_conf)
+
+plot(weight_kg~height_cm,data=student_data)
+lwr <- model_conf[,2] #신뢰구간의 하한값
+upr <- model_conf[,3] #신뢰구간의 상한값
+sx <- sort(student_data$height_cm,index.return=TRUE)
+abline(coef(model),lwd=2)
+lines(sx$x,lwr[sx$ix],col="blue",lty=2)
+lines(sx$x,upr[sx$ix],col="blue",lty=2)
+
+#예측구간
+model_pred <- predict(model,level=0.95,interval="predict")
+head(model_pred)
+p_lwr <- model_pred[,2]
+p_upr <- model_pred[,3]
+lines(student_data$height_cm,p_lwr,col="red",lty=2)
+lines(student_data$height_cm,p_upr,col="red",lty=2)
+
+#잔차 제곱의 합
+deviance(model)
+
+#예측하기
+predict(model,newdata = data.frame(height_cm=175),interval = "confidence")
+
+#모델 평가
+summary(model)
+anova(model)
+
+#--------------------------
+yhat <- predict(model)
+cbind(height_cm,yhat)
+
+join <- function(i)
+  lines(c(height_cm[i],height_cm[i]),c(weight_kg[i],yhat[i]),col="green")
+sapply(1:92, join)
+
+#회귀식 함수
+result <- 0
+
+y=function(x){
+  result=32.6604+(0.2247*x)
+  return(result)
+}
+
